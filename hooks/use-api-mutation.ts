@@ -1,0 +1,25 @@
+import { useState } from "react";
+import { useMutation } from "convex/react";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const useApiMutation = (mutationFunction: any) => {
+    const [pending, setPending] = useState(false);
+    const apiMutation = useMutation(mutationFunction);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mutate = async (payload: any) => {
+        setPending(true);
+        return apiMutation(payload).finally(() => setPending(false))
+            .then((result) => {
+                return result
+            })
+            .catch((err)=>{
+                throw err
+            })
+    }
+
+    return {
+        mutate,
+        pending
+    }
+}
