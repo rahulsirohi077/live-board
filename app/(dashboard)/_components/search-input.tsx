@@ -6,8 +6,7 @@ import { useDebounceValue } from 'usehooks-ts'
 import { useRouter } from 'next/navigation'
 import {
     ChangeEvent,
-    useEffect,
-    useState
+    useEffect
 } from "react"
 import { Input } from '@/components/ui/input'
 
@@ -25,7 +24,7 @@ const SearchInput = () => {
         const url = queryString.stringifyUrl({
             url:"/",
             query:{
-                Search: debouncedValue
+                search: debouncedValue
             }
         },{skipEmptyString:true,skipNull:true});
 

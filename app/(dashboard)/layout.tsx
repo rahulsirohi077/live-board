@@ -15,7 +15,7 @@ const DashboardLayout = ({
             <div className="pl-15 h-full">
                 <div className="flex gap-x-3 h-full">
                     <OrgSidebar />
-                    <div className="h-full flex-1">
+                    <div className="h-full flex-1 flex flex-col">
                         <Navbar/>
                         {children}
                     </div>
