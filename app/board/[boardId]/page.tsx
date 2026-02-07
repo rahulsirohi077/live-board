@@ -1,5 +1,7 @@
 import React from 'react'
 import { Canvas } from './_components/canvas'
+import { Room } from '@/components/room';
+import Loading from './_components/loading';
 
 interface BoardIdPageProps {
     params: Promise<{
@@ -14,7 +16,9 @@ const BoardIdPage = async ({
 
   return (
     <>
-      <Canvas boardId={boardId}/>
+      <Room roomId={boardId} fallback={<Loading/>}>
+        <Canvas boardId={boardId}/>
+      </Room>
     </>
   )
 }

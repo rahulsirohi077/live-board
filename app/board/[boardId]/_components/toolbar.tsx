@@ -1,3 +1,4 @@
+import { Skeleton } from '@/components/ui/skeleton'
 import React from 'react'
 
 export const ToolBar = () => {
@@ -27,4 +28,12 @@ export const ToolBar = () => {
         </div>
     </div>
   )
+}
+
+ToolBar.Skeleton = function ToolBarSkeleton () {
+    return (
+        <div className='absolute top-1/2 -translate-y-1/2 left-2 flex flex-col gap-y-4 bg-white h-90 w-13 shadow-md rounded-md p-1'>
+        <Skeleton  className='h-full w-full'/>
+    </div>
+    )
 }
