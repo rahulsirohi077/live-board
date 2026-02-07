@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react'
 
 const LiveProvider = ({children}:{children:ReactNode}) => {
   return (
-    <LiveblocksProvider publicApiKey={"pk_dev_vF6fCt3XZvrFl3SqwFDG3LVXg3ydtjEOTqTZmAdwQlMqj2dK9vtZ9moEpBzqtbip"}>
+    <LiveblocksProvider authEndpoint="/api/liveblocks-auth">
         {children}
     </LiveblocksProvider>
   )
