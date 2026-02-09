@@ -1,32 +1,55 @@
 "use client";
 
-import { useCanRedo, useCanUndo, useHistory, useSelf } from "@liveblocks/react/suspense";
+import { useCanRedo, useCanUndo, useHistory, useMutation } from "@liveblocks/react/suspense";
 import { Info } from "./info";
 import { Participants } from "./participants";
 import { ToolBar } from "./toolbar";
-import { useState } from "react";
-import { CanvasMode, CanvasState } from "@/types/canvas";
+import React, { useCallback, useState } from "react";
+import { Camera, CanvasMode, CanvasState } from "@/types/canvas";
+import { CursorsPresence } from "./cursors-presence";
+import { pointerEventToCanvasPoint } from "@/lib/utils";
 // import { useSelf } from "@liveblocks/react";
 
 interface CanvasProps {
     boardId: string
 }
 
-export const Canvas = ({boardId}:CanvasProps) => {
-    const [canvasState,setCanvasState] = useState<CanvasState>({
+export const Canvas = ({ boardId }: CanvasProps) => {
+    const [canvasState, setCanvasState] = useState<CanvasState>({
         mode: CanvasMode.None
     });
+    const [camera, setCamera] = useState<Camera>({ x: 0, y: 0 });
 
     const history = useHistory();
     const canUndo = useCanUndo();
     const canRedo = useCanRedo();
 
+    const onWheel = useCallback((e: React.WheelEvent) => {
+        setCamera((camera) => ({
+            x: camera.x - e.deltaX,
+            y: camera.y - e.deltaY
+        }))
+    }, [])
+
+    const onPointerMove = useMutation((
+        { setMyPresence },
+        e: React.PointerEvent
+    ) => {
+        e.preventDefault();
+
+        const current = pointerEventToCanvasPoint(e,camera);
+        setMyPresence({ cursor: current });
+    }, []);
+
+    const onPointerLeave = useMutation(( {setMyPresence}) => {
+        setMyPresence({cursor:null})
+    },[])
 
     return (
         <main className="h-full w-full relative bg-neutral-100 touch-none">
-            <Info boardId={boardId}/>
-            <Participants/>
-            <ToolBar 
+            <Info boardId={boardId} />
+            <Participants />
+            <ToolBar
                 canvasState={canvasState}
                 setCanvasState={setCanvasState}
                 canRedo={canRedo}
@@ -34,6 +57,15 @@ export const Canvas = ({boardId}:CanvasProps) => {
                 undo={history.undo}
                 redo={history.redo}
             />
+            <svg className="h-screen w-screen"
+                onWheel={onWheel}
+                onPointerMove={onPointerMove}
+                onPointerLeave={onPointerLeave}
+            >
+                <g>
+                    <CursorsPresence />
+                </g>
+            </svg>
         </main>
     )
 }
