@@ -12,6 +12,7 @@ import { nanoid } from 'nanoid'
 import { LiveObject } from "@liveblocks/node";
 import { LayerPreview } from "./LayerPreview";
 import { SelectionBox } from "./selection-box";
+import SelectionTools from "./selection-tools";
 // import { useSelf } from "@liveblocks/react";
 
 const MAX_LAYERS = 100;
@@ -139,10 +140,11 @@ export const Canvas = ({ boardId }: CanvasProps) => {
     },[history])
 
     const onWheel = useCallback((e: React.WheelEvent) => {
+        e.preventDefault();
         setCamera((camera) => ({
-            x: camera.x - e.deltaX,
-            y: camera.y - e.deltaY
-        }))
+        x: camera.x - (e.shiftKey ? e.deltaY : e.deltaX),
+        y: camera.y - (e.shiftKey ? 0 : e.deltaY)  
+    }))
     }, [])
 
     const onPointerMove = useMutation((
@@ -266,6 +268,10 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                 canUndo={canUndo}
                 undo={history.undo}
                 redo={history.redo}
+            />
+            <SelectionTools
+                camera={camera}
+                setLastUsedColor={setLastUsedColor}
             />
             <svg className="h-screen w-screen"
                 onWheel={onWheel}
