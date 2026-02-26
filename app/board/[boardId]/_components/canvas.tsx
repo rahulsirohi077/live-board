@@ -53,7 +53,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         const layer = new LiveObject({
             type:layerType,
             x: position.x,
-            y:position.y,
+            y: position.y,
             height:100,
             width:100,
             fill: lastUsedColor
